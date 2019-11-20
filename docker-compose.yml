@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    container_name: postgres
+    image: postgres:12.0
+    volumes:
+      - db_data:/var/lib/postgres
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pwd
+
+volumes:
+  db_data: {}
