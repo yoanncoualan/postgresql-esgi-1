@@ -5,9 +5,22 @@
 CREATE DATABASE boutique;
 \c boutique
 
-CREATE TABLE utilisateur (id SERIAL PRIMARY KEY, nom varchar(100) NOT NULL, prenom varchar(100) NOT NULL, email varchar(255), inscription date DEFAULT current_date);
+CREATE TABLE utilisateur (
+	id SERIAL PRIMARY KEY, 
+	nom varchar(100) NOT NULL, 
+	prenom varchar(100) NOT NULL, 
+	email varchar(255), 
+	inscription date DEFAULT current_date
+);
 
-INSERT INTO utilisateur (nom, prenom, email, inscription) VALUES ('Torvalds', 'Linus', 'linus.torvalds@linux.com', '1991/10/05'), ('Bezos', 'Jeff', 'jeff.bezos@amazon.com', '1994/07/05'), ('Musk', 'Elon', 'elon.musk@gmail.com', '1995/01/01'), ('Page', 'Larry', 'larry.page@gmail.com', '1998/09/04'), ('Musk', 'Elon', 'elon.musk@tesla.com', '2003/07/01'), ('Doe', 'John', 'john.doe@anonymous.com', current_date), ('Doe', 'Jane', 'jane.doe@anonymous.com', current_date);
+INSERT INTO utilisateur (nom, prenom, email, inscription) 
+VALUES ('Torvalds', 'Linus', 'linus.torvalds@linux.com', '1991/10/05'), 
+('Bezos', 'Jeff', 'jeff.bezos@amazon.com', '1994/07/05'), 
+('Musk', 'Elon', 'elon.musk@gmail.com', '1995/01/01'), 
+('Page', 'Larry', 'larry.page@gmail.com', '1998/09/04'), 
+('Musk', 'Elon', 'elon.musk@tesla.com', '2003/07/01'), 
+('Doe', 'John', 'john.doe@anonymous.com', current_date), 
+('Doe', 'Jane', 'jane.doe@anonymous.com', current_date);
 ```
 
 ## Corrections exercices
