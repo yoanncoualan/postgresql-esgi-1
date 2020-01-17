@@ -62,6 +62,13 @@ VALUES (1, 5, 1),
 (2, 1, 4), 
 (3, 2, 2), 
 (3, 3, 1);
+
+ALTER TABLE produit ADD prixventeht real;
+
+UPDATE produit SET prixventeht = 120 WHERE id = 1 OR id = 2;
+UPDATE produit SET prixventeht = 15 WHERE id = 3;
+UPDATE produit SET prixventeht = 30 WHERE id = 4;
+UPDATE produit SET prixventeht = 70 WHERE id = 5;
 ```
 
 ## Corrections exercices
@@ -93,7 +100,7 @@ __6/__ `SELECT * FROM utilisateur ORDER BY inscription DESC;`
 
 __7/__ `SELECT COUNT(inscription) FROM utilisateur WHERE inscription = current_date;`
 
-__8/__ `SELECT COUNT(nom) AS inscriptions FROM utilisateur WHERE inscription between '1990-01-01' and '1999-12-31';`
+__8/__ `SELECT COUNT(nom) AS inscriptions FROM utilisateur WHERE inscription BETWEEN '1990-01-01' AND '1999-12-31';`
 
 __9/__ `SELECT inscription, COUNT(inscription) AS nb FROM utilisateur GROUP BY inscription;`
 ***
@@ -220,3 +227,186 @@ WHERE c.id = (
 );
 ```
 ***
+
+### Exercices page 53
+__1/__ 
+```
+SELECT nom, prenom, inscription, current_date - inscription AS jours 
+FROM utilisateur;
+```
+
+__2/__ 
+```
+SELECT nom, prenom, inscription, current_date - inscription AS jours 
+FROM utilisateur 
+GROUP BY nom, prenom, inscription 
+HAVING current_date - inscription > 365 
+ORDER BY jours DESC;
+```
+
+__3/__ 
+```
+SELECT STRING_AGG(email, '; ') AS emails 
+FROM utilisateur;
+```
+
+__4/__ 
+```
+SELECT c.id, c.date, STRING_AGG(p.nom, ', ') AS produits 
+FROM commande c 
+INNER JOIN contenucommande cc ON c.id = cc.id_commande 
+INNER JOIN produit p ON p.id = cc.id_produit 
+GROUP BY c.id;
+```
+
+__5/__ 
+```
+SELECT nom, prixht, prixht * 1.2 AS prixttc 
+FROM produit;
+```
+
+__6/__ 
+```
+SELECT p.nom, SUM(cc.qte) 
+FROM produit p 
+INNER JOIN contenucommande cc ON cc.id_produit = p.id 
+GROUP BY p.nom;
+```
+
+__7/__ 
+```
+SELECT u.nom, prenom, SUM(cc.qte * prixht) AS montantHT, SUM((cc.qte * prixht) * 1.2) AS montantTTC 
+FROM utilisateur u
+INNER JOIN commande c ON u.id = c.id_utilisateur
+INNER JOIN contenucommande cc ON c.id = cc.id_commande
+INNER JOIN produit p ON cc.id_produit = p.id
+GROUP BY u.nom, u.prenom, c.id;
+```
+
+__8/__ 
+```
+SELECT nom, SUM(cc.qte) AS ventes 
+FROM contenucommande cc 
+INNER JOIN produit p ON p.id = cc.id_produit 
+GROUP BY nom 
+ORDER BY ventes DESC;
+```
+
+__9/__ 
+```
+SELECT u.nom, u.prenom, SUM(cc.qte) AS qte 
+FROM utilisateur u 
+LEFT JOIN commande c ON c.id_utilisateur = u.id 
+LEFT JOIN contenucommande cc ON cc.id_commande = c.id 
+GROUP BY u.nom, u.prenom, u.id;
+```
+
+__10/__ 
+```
+SELECT u.id, u.nom, u.prenom, SUM(p.prixht * cc.qte) AS depenses 
+FROM utilisateur u 
+LEFT JOIN commande c ON c.id_utilisateur = u.id 
+LEFT JOIN contenucommande cc ON cc.id_commande = c.id 
+LEFT JOIN produit p ON p.id = cc.id_produit 
+GROUP BY u.id, u.nom, u.prenom;
+```
+
+__11/__ 
+```
+SELECT c.id AS commande, u.nom, u.prenom, SUM(cc.qte * p.prixht) AS montant 
+FROM commande c 
+LEFT JOIN contenucommande cc ON cc.id_commande = c.id 
+LEFT JOIN produit p ON p.id = cc.id_produit 
+LEFT JOIN utilisateur u ON u.id = c.id_utilisateur 
+GROUP BY c.id, u.nom, u.prenom;
+```
+
+__12/__ 
+```
+SELECT AVG(p.prixht * cc.qte) AS moyenne 
+FROM commande c 
+INNER JOIN contenucommande cc ON cc.id_commande = c.id 
+INNER JOIN produit p ON p.id = cc.id_produit;
+```
+
+__13/__ 
+```
+SELECT u.nom, u.prenom, SUM(p.prixht * cc.qte) / COUNT(DISTINCT(c.id)) AS moyenne 
+FROM utilisateur u 
+INNER JOIN commande c ON c.id_utilisateur = u.id 
+INNER JOIN contenucommande cc ON cc.id_commande = c.id 
+INNER JOIN produit p ON p.id = cc.id_produit 
+GROUP BY u.nom, u.prenom;
+```
+
+__14/__ 
+```
+SELECT MIN(prixht), MAX(prixht), MAX(prixht) - MIN(prixht) AS ecart 
+FROM produit;
+```
+
+__15/__ 
+```
+SELECT nom, prixht, qte, prixht * qte AS CA 
+FROM produit;
+```
+
+__16/__ 
+```
+SELECT SUM(prixht * qte) AS CA 
+FROM produit;
+```
+
+__17/__ 
+```
+SELECT SUM(cc.qte * p.prixht) AS ca 
+FROM contenucommande cc 
+INNER JOIN produit p ON cc.id_produit = p.id;
+```
+
+__18/__ 
+```
+SELECT EXTRACT(month FROM inscription) AS mois, COUNT(id) AS nb 
+FROM utilisateur u 
+GROUP BY EXTRACT(month FROM inscription) 
+ORDER BY mois;
+```
+***
+
+### Exercices page 57
+__1/__ 
+```
+SELECT id, nom, prixventeht - prixht AS marge 
+FROM produit 
+ORDER BY prixventeht - prixht;
+```
+
+__2/__ 
+```
+SELECT p.id, p.nom, SUM(prixventeht - prixht) AS marge_unitaire, SUM(cc.qte) AS qte_vendu, SUM((p.prixventeht - p.prixht) * cc.qte) AS marge_totale 
+FROM produit p 
+LEFT JOIN contenucommande cc ON p.id = cc.id_produit 
+GROUP BY p.id, p.nom 
+ORDER BY SUM((p.prixventeht - p.prixht) * cc.qte);
+```
+***
+
+## TRIGGERS
+
+### Création de la fonction
+```
+CREATE FUNCTION maj_stock() RETURNS TRIGGER AS $stock$
+BEGIN
+	UPDATE produit SET qte = qte - NEW.qte WHERE id = NEW.id_produit;
+	RETURN NEW;
+END;
+$stock$ LANGUAGE plpgsql;
+```
+
+### Création du trigger
+```
+CREATE TRIGGER maj_stock AFTER INSERT 
+ON contenucommande 
+FOR EACH ROW 
+EXECUTE PROCEDURE maj_stock();
+```
