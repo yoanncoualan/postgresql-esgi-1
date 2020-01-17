@@ -138,3 +138,85 @@ FROM (
 ORDER BY inscription DESC;
 ```
 ***
+
+### Exercices page 49
+__1/__ 
+```
+SELECT * 
+FROM utilisateur u 
+INNER JOIN commande c ON u.id = c.id_utilisateur;
+```
+
+__2/__ 
+```
+SELECT DISTINCT ON (nom, prenom) nom, prenom, email, inscription 
+FROM utilisateur u 
+INNER JOIN commande c ON u.id = c.id_utilisateur;
+```
+
+__3/__ 
+```
+SELECT COUNT(DISTINCT u.id) 
+FROM utilisateur u 
+INNER JOIN commande c ON u.id = c.id_utilisateur;
+```
+
+__4/__ 
+```
+SELECT nom, prenom, COUNT(nom) AS nb 
+FROM utilisateur u 
+INNER JOIN commande c ON u.id = c.id_utilisateur 
+GROUP BY nom, prenom;
+```
+
+__5/__ 
+```
+SELECT nom, prenom 
+FROM utilisateur u 
+LEFT JOIN commande c ON u.id = c.id_utilisateur 
+WHERE c.id IS NULL;
+```
+
+__6/__ 
+```
+SELECT * 
+FROM utilisateur u 
+INNER JOIN commande c ON u.id = c.id_utilisateur 
+WHERE c.date = current_date;
+```
+
+__7/__ 
+```
+SELECT p.nom 
+FROM produit p 
+LEFT JOIN contenucommande cc ON cc.id_produit = p.id 
+WHERE cc.id IS NULL;
+```
+
+__8/__ 
+```
+SELECT u.nom, u.prenom, p.nom, cc.qte 
+FROM produit p 
+INNER JOIN contenucommande cc ON p.id = cc.id_produit 
+INNER JOIN commande c ON cc.id_commande = c.id 
+INNER JOIN utilisateur u ON u.id = c.id_utilisateur 
+WHERE u.nom = 'Bezos';
+```
+
+__9/__ 
+```
+SELECT u.nom, u.prenom, p.nom, cc.qte 
+FROM produit p 
+INNER JOIN contenucommande cc ON p.id = cc.id_produit 
+INNER JOIN commande c ON cc.id_commande = c.id 
+INNER JOIN utilisateur u ON u.id = c.id_utilisateur 
+WHERE c.id = (
+	SELECT c.id 
+	FROM commande c 
+	INNER JOIN utilisateur u ON u.id = c.id_utilisateur 
+	WHERE u.nom = 'Torvalds' 
+	ORDER BY c.date ASC 
+	LIMIT 1
+);
+```
+***
