@@ -21,6 +21,47 @@ VALUES ('Torvalds', 'Linus', 'linus.torvalds@linux.com', '1991/10/05'),
 ('Musk', 'Elon', 'elon.musk@tesla.com', '2003/07/01'), 
 ('Doe', 'John', 'john.doe@anonymous.com', current_date), 
 ('Doe', 'Jane', 'jane.doe@anonymous.com', current_date);
+
+CREATE TABLE produit (
+	id SERIAL PRIMARY KEY, 
+	nom varchar(50) NOT NULL, 
+	prixht real NOT NULL, 
+	qte int DEFAULT 0
+);
+
+INSERT INTO produit (nom, prixht, qte) 
+VALUES ('Objet 1', 100, 500), 
+('Objet 2', 80, 10), 
+('Livre 1', 10, 120), 
+('Livre 2', 25, 8), 
+('Jeux 1', 60, 200);
+
+CREATE TABLE commande(
+	id SERIAL PRIMARY KEY, 
+	id_utilisateur int REFERENCES utilisateur(id), 
+	date date DEFAULT current_date
+);
+
+INSERT INTO commande (id_utilisateur, date) 
+VALUES (1, '1991/03/10'), 
+(1, '1999/11/11'), 
+(2, current_date), 
+(6, current_date), 
+(null, current_date);
+
+CREATE TABLE contenucommande(
+	id SERIAL PRIMARY KEY, 
+	id_commande int REFERENCES commande(id), 
+	id_produit int REFERENCES produit(id), 
+	qte int DEFAULT 0
+);
+
+INSERT INTO contenucommande (id_commande, id_produit, qte) 
+VALUES (1, 5, 1), 
+(1, 2, 1), 
+(2, 1, 4), 
+(3, 2, 2), 
+(3, 3, 1);
 ```
 
 ## Corrections exercices
@@ -63,4 +104,37 @@ __1/__ `SELECT * FROM utilisateur WHERE email LIKE '%@gmail%';`
 __2/__ `SELECT COUNT(email) AS nb FROM utilisateur WHERE email LIKE '%@gmail%';`
 
 __3/__ `SELECT * FROM utilisateur WHERE email NOT LIKE '%_@_%._%';`
+***
+
+### Exercices page 33
+__1/__ `SELECT * FROM utilisateur WHERE inscription::text LIKE '2019%';`
+
+__2/__ `SELECT nom FROM utilisateur GROUP BY nom HAVING COUNT(nom) > 1;`
+
+__3/__ `SELECT COUNT(nom), nom, prenom FROM utilisateur GROUP BY nom, prenom HAVING COUNT(nom) > 1;`
+
+__4/__ `SELECT COUNT(DISTINCT email) AS emails FROM utilisateur;`
+***
+
+### Exercices page 36
+__1/__ 
+```
+SELECT nom, prenom, email, inscription 
+FROM  utilisateur 
+WHERE inscription > (
+	SELECT inscription 
+	FROM utilisateur 
+	WHERE prenom = 'Jeff'
+);
+```
+
+__2/__ 
+```
+SELECT * 
+FROM (
+	SELECT DISTINCT ON (nom, prenom) nom, prenom, email, inscription 
+	FROM utilisateur
+) u 
+ORDER BY inscription DESC;
+```
 ***
