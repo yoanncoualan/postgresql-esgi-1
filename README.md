@@ -85,7 +85,7 @@ __4/__ `SELECT inscription, email FROM utilisateur WHERE inscription = current_d
 __5/__ `SELECT * FROM utilisateur WHERE inscription BETWEEN '1990/01/01' AND '1999/12/31';`
 ***
 
-### Exercices page 26
+### [Exercices page 26](http://bit.ly/postgresql-26)
 __1/__ `SELECT nom, prenom, email, inscription FROM utilisateur ORDER BY nom;`
 
 __2/__ `SELECT COUNT(nom) FROM utilisateur WHERE nom = 'Doe';`
@@ -105,7 +105,7 @@ __8/__ `SELECT COUNT(nom) AS inscriptions FROM utilisateur WHERE inscription BET
 __9/__ `SELECT inscription, COUNT(inscription) AS nb FROM utilisateur GROUP BY inscription;`
 ***
 
-### Exercices page 29
+### [Exercices page 29](http://bit.ly/postgresql-29)
 __1/__ `SELECT * FROM utilisateur WHERE email LIKE '%@gmail%';`
 
 __2/__ `SELECT COUNT(email) AS nb FROM utilisateur WHERE email LIKE '%@gmail%';`
@@ -113,7 +113,7 @@ __2/__ `SELECT COUNT(email) AS nb FROM utilisateur WHERE email LIKE '%@gmail%';`
 __3/__ `SELECT * FROM utilisateur WHERE email NOT LIKE '%_@_%._%';`
 ***
 
-### Exercices page 33
+### [Exercices page 33](http://bit.ly/postgresql-33)
 __1/__ `SELECT * FROM utilisateur WHERE inscription::text LIKE '2019%';`
 
 __2/__ `SELECT nom FROM utilisateur GROUP BY nom HAVING COUNT(nom) > 1;`
@@ -123,7 +123,7 @@ __3/__ `SELECT COUNT(nom), nom, prenom FROM utilisateur GROUP BY nom, prenom HAV
 __4/__ `SELECT COUNT(DISTINCT email) AS emails FROM utilisateur;`
 ***
 
-### Exercices page 36
+### [Exercices page 36](http://bit.ly/postgresql-36)
 __1/__ 
 ```
 SELECT nom, prenom, email, inscription 
@@ -146,7 +146,7 @@ ORDER BY inscription DESC;
 ```
 ***
 
-### Exercices page 49
+### [Exercices page 49](http://bit.ly/postgresql-49)
 __1/__ 
 ```
 SELECT * 
@@ -228,7 +228,7 @@ WHERE c.id = (
 ```
 ***
 
-### Exercices page 53
+### [Exercices page 53](http://bit.ly/postgresql-53)
 __1/__ 
 ```
 SELECT nom, prenom, inscription, current_date - inscription AS jours 
@@ -373,7 +373,7 @@ ORDER BY mois;
 ```
 ***
 
-### Exercices page 57
+### [Exercices page 57](http://bit.ly/postgresql-57)
 __1/__ 
 ```
 SELECT id, nom, prixventeht - prixht AS marge 
